@@ -1,0 +1,1 @@
+const String baseUrl = 'https://dekontaminasi.com/api/id/covid19/';
