@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skl_idn/api/model/news.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsDetailScreen extends StatelessWidget {
   const NewsDetailScreen({super.key, this.news});
@@ -16,10 +17,19 @@ class NewsDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('${news?.url}', style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold
-              ),),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: ElevatedButton(
+                    onPressed: () async {
+                      final url = '${news?.url}';
+
+                      if(await canLaunch(url)) {
+                        await launch(url);
+                      }
+                    },
+                    child: Text('Go To The News'),
+                ),
+              ),
               Text('Name : ${news?.title}', style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold

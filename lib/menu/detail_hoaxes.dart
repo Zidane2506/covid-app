@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skl_idn/api/model/hoaxes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HoaxesDetailScreen extends StatelessWidget {
   const HoaxesDetailScreen({super.key, this.hoaxes});
@@ -16,10 +17,19 @@ class HoaxesDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('${hoaxes?.url}', style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold
-              ),),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final url = '${hoaxes?.url}';
+
+                    if(await canLaunch(url)) {
+                      await launch(url);
+                    }
+                  },
+                  child: Text('Go To The News'),
+                ),
+              ),
               Text('Name : ${hoaxes?.title}', style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold

@@ -7,7 +7,6 @@ import '../api/model/hospital.dart';
 import '../api/model/hoaxes.dart';
 import 'package:skl_idn/menu/detail_hospitals.dart';
 import '../api/model/news.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'detail_hoaxes.dart';
 import 'detail_news.dart';
 import 'package:skl_idn/menu/stats_list.dart';
