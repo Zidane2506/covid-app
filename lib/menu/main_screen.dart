@@ -2,14 +2,19 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:skl_idn/api/model/stats.dart';
 import 'package:skl_idn/api/service/api_service.dart';
 import '../api/model/hospital.dart';
 import '../api/model/hoaxes.dart';
 import 'package:skl_idn/menu/detail_hospitals.dart';
 import '../api/model/news.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'detail_hoaxes.dart';
 import 'detail_news.dart';
+import 'package:skl_idn/menu/stats_list.dart';
+
+import 'hoaxes_list.dart';
+import 'hospital_list.dart';
+import 'news_list.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -67,322 +72,28 @@ class _MenuScreenState extends State<MenuScreen> {
                   SizedBox(
                     height: 15,
                   ),
-                  FutureBuilder <List<Hospital>?>(
-                    future: hospitals,
-                    builder: (context, snapShot) {
-                      if (snapShot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapShot.data!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HospitalsDetailScreen(
-                                        hospital :snapShot.data![index]
-                                      )),
-                                ),
-                                child: SizedBox(
-                                  height: 50,
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 14),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${snapShot.data![index].name}',
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold,
-                                                    fontFamily: 'Hesveltica',
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                  HospitalList(hospitals: hospitals),
                   SizedBox(
                     height: 15,
                   ),
                   Text('Hoaxes',
                     style: TextStyle(fontSize: 25),
                   ),
-                  FutureBuilder <List<Hoaxes>?>(
-                    future: hoaxes,
-                    builder: (context, snapShot) {
-                      if (snapShot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapShot.data!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HoaxesDetailScreen(
-                                          hoaxes :snapShot.data![index]
-                                      )),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                  child: SizedBox(
-                                    height: 50,
-                                    child: Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 14),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    '${snapShot.data![index].title}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontFamily: 'Hesveltica',
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '${snapShot.data![index].timestamp}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontFamily: 'Hesveltica',
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                  HoaxesList(hoaxes: hoaxes),
                   SizedBox(
                     height: 15,
                   ),
                   Text('News',
                     style: TextStyle(fontSize: 25),
                   ),
-                  FutureBuilder <List<News>?>(
-                    future: news,
-                    builder: (context, snapShot) {
-                      if (snapShot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: snapShot.data!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => NewsDetailScreen(
-                                          news :snapShot.data![index]
-                                      )),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                  child: SizedBox(
-                                    height: 50,
-                                    child: Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 14),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    '${snapShot.data![index].title}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontFamily: 'Hesveltica',
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '${snapShot.data![index].timestamp}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontFamily: 'Hesveltica',
-                                                      fontSize: 10,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                  NewsList(news: news),
                   SizedBox(
                     height: 15,
                   ),
                   Text('Status',
                     style: TextStyle(fontSize: 25),
                   ),
-                  FutureBuilder (
-                    future: stats,
-                    builder: (context, snapShot) {
-                      if (snapShot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if(snapShot.hasError) {
-                        return Text('Error : ${snapShot.error}');
-                      } else if(snapShot.hasData) {
-                        Stats stats = snapShot.data!;
-                        return SizedBox(
-                          height: 100,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: stats.regions!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                child: SizedBox(
-                                  height: 50,
-                                  child: Card(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 14),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '${stats.regions![index].name!}',
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontFamily: 'Hesveltica',
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'Positif : ${stats.regions![index].numbers!.infected}',
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontFamily: 'Hesveltica',
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'Dead : ${stats.regions![index].numbers!.fatal}',
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontFamily: 'Hesveltica',
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  'Healthy : ${stats.regions![index].numbers!.recovered}',
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight.bold,
-                                                    fontFamily: 'Hesveltica',
-                                                    fontSize: 10,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        return Text('No data available');
-                      }
-                    },
-                  ),
+                  StatsList(stats: stats),
                 ],
               ),
             )
@@ -392,3 +103,5 @@ class _MenuScreenState extends State<MenuScreen> {
     );
   }
 }
+
+
